@@ -3,7 +3,7 @@
 # Extract VS Code version from code-server
 get_vscode_version() {
     # code-server --version may output either:
-    # 1) "4.x.y <hash> with Code 1.a.b"  (single line)
+    # 1) head line is the version
     # 2) multiple sections including "with Code 1.a.b" such as "4.109.2 9184b645cc7aa41b750e2f2ef956f2896512dd84 with Code 1.109.2"
     local raw
     raw="$(code-server --version)"
