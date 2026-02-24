@@ -6,18 +6,18 @@ get_vscode_version() {
     # 1) "4.x.y <hash> with Code 1.a.b"  (single line)
     # 2) multiple sections including "with Code 1.a.b" such as "4.109.2 9184b645cc7aa41b750e2f2ef956f2896512dd84 with Code 1.109.2"
     local raw
-    raw="$(code-server --version | tr '\n' ' ')"
+    raw="$(code-server --version)"
 
-    # Prefer "with Code X.Y.Z"
+    # New format: "... with Code X.Y.Z"
     local code_ver
-    code_ver="$(echo "$raw" | sed -nE 's/.*with Code ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')"
+    code_ver="$(echo "$raw" | tr '\n' ' ' | sed -nE 's/.*with Code ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p')"
     if [ -n "$code_ver" ]; then
         echo "$code_ver"
         return 0
     fi
 
-    # Fallback: first token if it's like 1.XX.XX (rare)
-    echo "$raw" | awk '{print $1}'
+    # Old format: first line is the VS Code version
+    echo "$raw" | head -n1 | awk '{print $1}'
 }
 
 # Get user-data-dir from running code-server process
